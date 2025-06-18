@@ -23,5 +23,14 @@ Why choose this template? 🤔 Well, there are countless templates out there, bu
 - 3️⃣ Start development: pnpm dev
 - 4️⃣ Build for production: pnpm build
 
+## 📥 Scrape LinkedIn Comments
+After loading the extension:
+
+1. Open a LinkedIn post.
+2. In the extension popup, click **Generate Leads from LinkedIn post**.
+3. When processing is complete, a centered popup displays a **Download CSV** button.
+
+The CSV omits duplicate commenters and the download button includes accessible labels for screen readers.
+
 ### 🤝 How to Contribute
 We welcome and appreciate contributions to improve this project. Whether you would like to fix a bug, introduce a new feature, or enhance the documentation, your contributions are highly valued.
