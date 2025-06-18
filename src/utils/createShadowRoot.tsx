@@ -1,11 +1,16 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 
 /**
- * Creates a shadow root with the specified styles and returns a React root in it.
+ * Creates a shadow root with the specified styles and returns helpers for
+ * mounting React components.
  * @param {string} styles - CSS styles to be applied to the shadow root.
- * @returns {ReactRoot} - React root rendered inside the shadow root.
- */
-export default function createShadowRoot(styles: string) {
+ * @returns {{ root: Root; container: HTMLDivElement }} - React root and its
+ * container element.
+*/
+export default function createShadowRoot(styles: string): {
+  root: Root;
+  container: HTMLDivElement;
+} {
   // Create a container element to hold the shadow root
   const container = document.createElement('div');
 
@@ -22,6 +27,6 @@ export default function createShadowRoot(styles: string) {
   // Append the container element to the document body
   document.body.appendChild(container);
 
-  // Return a React root created inside the shadow root
-  return createRoot(shadow);
+  // Return the React root and container for later cleanup
+  return { root: createRoot(shadow), container };
 }

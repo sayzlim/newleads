@@ -10,6 +10,15 @@ export default function Popup(): JSX.Element {
     });
   };
 
+  const handleToggleUi = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab?.id) {
+        chrome.tabs.sendMessage(activeTab.id, { type: 'toggle-ui' });
+      }
+    });
+  };
+
   return (
     <div id='my-ext' className='container space-y-2' data-theme='light'>
       <button
@@ -19,17 +28,12 @@ export default function Popup(): JSX.Element {
       >
         Generate Leads from LinkedIn post
       </button>
-      <button type='button' className='btn btn-outline'>
-        Default
-      </button>
-      <button type='button' className='btn btn-outline btn-primary'>
-        Primary
-      </button>
-      <button type='button' className='btn btn-outline btn-secondary'>
-        Secondary
-      </button>
-      <button type='button' className='btn btn-outline btn-accent'>
-        Accent
+      <button
+        type='button'
+        className='btn btn-secondary w-full'
+        onClick={handleToggleUi}
+      >
+        Toggle Tools
       </button>
     </div>
   );

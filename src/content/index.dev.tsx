@@ -1,43 +1,49 @@
 /**
  * Initializes the application with Hot Module Replacement (HMR) support for CSS changes.
- * This module addresses issues with HMR when using inline CSS stylesheets during development.
- * When changes are made to Tailwind CSS or other CSS classes, the dev server typically needs
- * to be stopped and restarted to apply the new styles. This module intercepts CSS changes and
- * applies them dynamically without requiring a full dev server restart, thereby improving
- * development efficiency by providing smoother HMR for CSS changes.
- *
- * @module index.dev
+ * The UI is mounted only when the popup sends a toggle message.
  */
-
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 
 import generateLeads from './generateLeads';
-
 import Content from './Content';
 
 import '@assets/styles/index.css';
 
-const container = document.createElement('div');
+let root: Root | null = null;
+let container: HTMLDivElement | null = null;
 
-// Get the style element corresponding to the CSS file
-const styleElement = document.querySelector('style[data-vite-dev-id]');
+const mount = () => {
+  container = document.createElement('div');
+  const styleElement = document.querySelector('style[data-vite-dev-id]');
+  if (!styleElement) {
+    throw new Error('Style element with attribute data-vite-dev-id not found.');
+  }
+  const shadowRoot = container.attachShadow({ mode: 'open' });
+  shadowRoot.appendChild(styleElement.cloneNode(true));
+  document.body.appendChild(container);
+  root = createRoot(shadowRoot);
+  root.render(<Content />);
+};
 
-if (!styleElement) {
-  throw new Error('Style element with attribute data-vite-dev-id not found.');
-}
-
-// Attach the style element to the shadow root
-const shadowRoot = container.attachShadow({ mode: 'open' });
-shadowRoot.appendChild(styleElement);
-
-document.body.appendChild(container);
-
-// Render the application inside the shadow root
-const root = createRoot(shadowRoot);
-root.render(<Content />);
+const unmount = () => {
+  if (root) {
+    root.unmount();
+    root = null;
+  }
+  if (container) {
+    container.remove();
+    container = null;
+  }
+};
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === 'generate-leads') {
     generateLeads();
+  } else if (message.type === 'toggle-ui') {
+    if (root) {
+      unmount();
+    } else {
+      mount();
+    }
   }
 });
