@@ -3,6 +3,6 @@ import createShadowRoot from '@utils/createShadowRoot';
 
 import Popup from './Popup';
 
-const root = createShadowRoot(styles);
+const { root } = createShadowRoot(styles);
 
 root.render(<Popup />);
