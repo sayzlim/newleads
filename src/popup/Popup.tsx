@@ -20,18 +20,20 @@ export default function Popup(): JSX.Element {
   };
 
   return (
-    <div id='my-ext' className='container space-y-2' data-theme='light'>
+    <div id='my-ext' className='container space-y-4 p-4' data-theme='light'>
       <button
         type='button'
-        className='btn btn-primary w-full'
+        className='btn btn-primary w-full py-3'
         onClick={handleGenerateLeads}
+        aria-label='Generate leads from LinkedIn post'
       >
         Generate Leads from LinkedIn post
       </button>
       <button
         type='button'
-        className='btn btn-secondary w-full'
+        className='btn btn-secondary w-full py-3'
         onClick={handleToggleUi}
+        aria-label='Toggle tools UI'
       >
         Toggle Tools
       </button>
